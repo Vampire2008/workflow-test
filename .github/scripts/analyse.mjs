@@ -47,7 +47,7 @@ if (releases.data.length) {
 
 const date = new Date();
 
-let releaseTag = `${process.env.MAJOR}.0-${date.getUTCFullYear()}${date.getUTCMonth}${date.getUTCDate()}-${date.getUTCHours()}${date.getUTCMinutes()}`;
+let releaseTag = `${process.env.MAJOR}.0-${date.getUTCFullYear()}${date.getUTCMonth()}${date.getUTCDate()}-${date.getUTCHours()}${date.getUTCMinutes()}`;
 
 await octokit.rest.repos.createRelease({
     owner,
