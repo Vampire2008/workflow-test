@@ -3,6 +3,9 @@ name: On release
 on:
   release:
     types: [released, prereleased, deleted]
+  workflow_run:
+    workflows: [Create Release]
+    types: completed
 
 jobs:
   callBuild:
@@ -10,7 +13,7 @@ jobs:
     steps:
       - name: Extract release
         id: extractRelease
-        run: echo RELEASE=$([regex]::Match("${{ github.ref }}", "\d{2}\.\d").Groups[0].Value) >> $env:GITHUB_OUTPUT
+        run: echo RELEASE=$([regex]::Match("${{ github.ref_name }}", "\d{2}\.\d").Groups[0].Value) >> $env:GITHUB_OUTPUT
 
       - name: Write vars
         run: |
