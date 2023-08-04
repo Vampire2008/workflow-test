@@ -1,0 +1,18 @@
+name: On release
+
+on:
+  release:
+    types: [created, deleted]
+
+jobs:
+  callBuild:
+    runs-on: windows-latest
+    steps:
+      - name: Extract release
+        id: extractRelease
+        run: echo RELEASE=$([regex]::Match("${{ github.ref }}", "\d{2}\.\d").Groups[0].Value)) >> $env:GITHUB_OUTPUT
+
+      - name: Write vars
+        run: |
+          echo ${{ github.ref }}
+          echo ${{ github.ref_name }}
