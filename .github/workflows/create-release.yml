@@ -35,3 +35,6 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAJOR: ${{ inputs.major }}
           BRANCH: ${{ github.ref_name }}
+
+      - name: Run other
+        uses: ./.github/workflows/on-release.yml
