@@ -4,6 +4,10 @@ on:
   release:
     types: [released, prereleased, deleted]
   workflow_call:
+    inputs:
+      release:
+        type: string
+        required: false
 
 jobs:
   callBuild:
@@ -11,7 +15,9 @@ jobs:
     steps:
       - name: Extract release
         id: extractRelease
-        run: echo RELEASE=$([regex]::Match("${{ github.ref_name }}", "\d{2}\.\d").Groups[0].Value) >> $env:GITHUB_OUTPUT
+        run: |
+          $str = [string]::IsNullOrEmpty("${{ inputs.release }}") ? ${{ inputs.release }} : [regex]::Match("${{ github.ref_name }}", "\d{2}\.\d").Groups[0].Value
+          echo RELEASE=$str >> $env:GITHUB_OUTPUT
 
       - name: Write vars
         run: |
