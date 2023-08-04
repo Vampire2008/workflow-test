@@ -16,7 +16,7 @@ jobs:
       - name: Extract release
         id: extractRelease
         run: |
-          $str = [string]::IsNullOrEmpty("${{ inputs.release }}") ? ${{ inputs.release }} : [regex]::Match("${{ github.ref_name }}", "\d{2}\.\d").Groups[0].Value
+          $str = ![string]::IsNullOrEmpty("${{ inputs.release }}") ? "${{ inputs.release }}" : [regex]::Match("${{ github.ref_name }}", "\d{2}\.\d").Groups[0].Value
           echo RELEASE=$str >> $env:GITHUB_OUTPUT
 
       - name: Write vars
