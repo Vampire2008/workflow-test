@@ -2,7 +2,7 @@ name: On release
 
 on:
   release:
-    types: [created, deleted]
+    types: [released, prereleased, deleted]
 
 jobs:
   callBuild:
@@ -10,9 +10,10 @@ jobs:
     steps:
       - name: Extract release
         id: extractRelease
-        run: echo RELEASE=$([regex]::Match("${{ github.ref }}", "\d{2}\.\d").Groups[0].Value)) >> $env:GITHUB_OUTPUT
+        run: echo RELEASE=$([regex]::Match("${{ github.ref }}", "\d{2}\.\d").Groups[0].Value) >> $env:GITHUB_OUTPUT
 
       - name: Write vars
         run: |
           echo ${{ github.ref }}
           echo ${{ github.ref_name }}
+          echo ${{ steps.extractRelease.outputs.RELEASE }}
