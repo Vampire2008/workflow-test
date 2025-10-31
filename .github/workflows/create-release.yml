@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone
-        uses: actions/checkout
+        uses: actions/checkout@v3
 
       - name: Install node
-        uses: actions/setup-node
+        uses: actions/setup-node@v3
 
       - name: Install packages
         run: npm ci
