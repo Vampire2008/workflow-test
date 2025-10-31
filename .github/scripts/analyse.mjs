@@ -1,7 +1,7 @@
 import { Octokit } from "octokit";
 
 const octokit = new Octokit({
-    auth: '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'
+    auth: process.env.TOKEN
 });
 
 const [owner, repo] = process.env.REPO.split('/');
