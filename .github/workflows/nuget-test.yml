@@ -1,0 +1,28 @@
+name: Nuget Test Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write  # enable GitHub OIDC token issuance for this job
+    
+    steps:
+      # Build your artifacts/my-sdk.nupkg package here
+    
+      # Get a short-lived NuGet API key
+      - name: NuGet login 1 (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+    
+     # Get a short-lived NuGet API key
+      - name: NuGet login 2 (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login2
+        with:
+          user: ${{ secrets.NUGET_USER }}
