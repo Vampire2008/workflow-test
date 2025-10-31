@@ -36,5 +36,5 @@ jobs:
           MAJOR: ${{ inputs.major }}
           BRANCH: ${{ github.ref_name }}
 
-      - name: Run other
-        uses: ./.github/workflows/on-release.yml
+  job2:
+    uses: ./.github/workflows/on-release.yml
