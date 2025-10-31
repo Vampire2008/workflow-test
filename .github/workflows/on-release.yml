@@ -3,9 +3,7 @@ name: On release
 on:
   release:
     types: [released, prereleased, deleted]
-  workflow_run:
-    workflows: [Create Release]
-    types: completed
+  workflow_call:
 
 jobs:
   callBuild:
