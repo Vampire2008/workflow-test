@@ -61,3 +61,5 @@ await octokit.rest.repos.createRelease({
     body: `Changed: ${Object.keys(whatChanged).filter(k => whatChanged[k]).join(', ')}`,
     prerelease: true
 });
+
+console.log(`RELEASE=${process.env.MAJOR}`);
