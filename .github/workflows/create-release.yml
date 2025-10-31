@@ -34,3 +34,4 @@ jobs:
           REPO: ${{ github.repository }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAJOR: ${{ inputs.major }}
+          BRANCH: ${{ github.ref_name }}

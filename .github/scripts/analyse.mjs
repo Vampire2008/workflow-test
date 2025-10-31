@@ -1,7 +1,8 @@
 import { Octokit } from "octokit";
 
 const octokit = new Octokit({
-    auth: process.env.TOKEN
+    // auth: process.env.TOKEN
+    auth: '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'
 });
 
 const [owner, repo] = process.env.REPO.split('/');
@@ -17,28 +18,31 @@ let whatChanged = {
 };
 
 if (releases.data.length) {
-
-    const startTag = releases.data[1]?.tag_name;
-    const endTag = releases.data[0].tag_name;
+    const startTag = releases.data[0]?.tag_name;
 
     const tags = await octokit.rest.repos.listTags({
         owner,
         repo
     });
 
-    const endHash = tags.data.find(t => t.name === endTag).commit.sha;
+    const lastCommitResponse = await octokit.rest.repos.getCommit({
+        owner,
+        repo,
+        ref: process.env.BRANCH,
+        mediaType: {
+            format: 'sha'
+        }
+    });
 
-    const startHash = startTag ? tags.data.find(t => t.name === startTag).commit.sha
-        : (await octokit.rest.repos.listCommits({
-            owner,
-            repo
-        })).data.at(-1);
+    const lastCommitHash = lastCommitResponse.data;
+
+    const startHash = tags.data.find(t => t.name === startTag).commit.sha;
 
     const compare = await octokit.rest.repos.compareCommits({
         owner,
         repo,
         base: startHash,
-        head: endHash
+        head: lastCommitHash
     });
 
     whatChanged.project1 = compare.data.files.some(f => f.filename.startsWith('project1') || f.filename.startsWith('base'));
@@ -47,7 +51,7 @@ if (releases.data.length) {
 
 const date = new Date();
 
-let releaseTag = `${process.env.MAJOR}.0-${date.getUTCFullYear()}${date.getUTCMonth()}${date.getUTCDate()}-${date.getUTCHours()}${date.getUTCMinutes()}`;
+let releaseTag = `${process.env.MAJOR}.0-${date.getUTCFullYear()}${date.getUTCMonth().toString().padStart(2, '0')}${date.getUTCDate().toString().padStart(2, '0')}-${date.getUTCHours().toString().padStart(2, '0'), 2}${date.getUTCMinutes().toString().padStart(2, '0')}`;
 
 await octokit.rest.repos.createRelease({
     owner,
