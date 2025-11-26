@@ -1,0 +1,14 @@
+name: Test Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Run tests
+        env:
+          DOTNET_MyBool: ${{ 'expr' == 'expr' }} 
+        shell: pwsh
+        run: echo "DOTNET_MyBool is $env:DOTNET_MyBool"
