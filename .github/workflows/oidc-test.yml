@@ -14,7 +14,8 @@ jobs:
       - name: Test OIDC token
         run: |
           echo "Requesting OIDC token..."
-          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=https://localhost:6001" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
-          qqq=$(echo $OIDC_TOKEN | jq -j '.value')
+          res=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=https://localhost:6001" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
+          echo $res
+          qqq=$(echo $res | jq -j '.value')
           echo $qqq
           echo "qqq=$qqq" >> $GITHUB_ENV
