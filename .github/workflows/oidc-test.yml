@@ -6,7 +6,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    environment: dev
+      
     permissions:
       id-token: write # enable GitHub OIDC token issuance for this job
 
