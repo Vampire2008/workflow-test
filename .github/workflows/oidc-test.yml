@@ -1,0 +1,20 @@
+name: OIDC test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # enable GitHub OIDC token issuance for this job
+
+    steps:
+      - name: Test OIDC token
+        run: |
+          echo "Requesting OIDC token..."
+          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=https://localhost:6001" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
+          JWT=$(echo $OIDC_TOKEN | jq -j '.value')
+          echo $JWT
+          echo "JWT=$JWT" >> $GITHUB_ENV
