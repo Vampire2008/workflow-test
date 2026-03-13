@@ -13,9 +13,24 @@ jobs:
 
     steps:
       - name: Test OIDC token
+        id: oidc
         run: |
           echo "Requesting OIDC token..."
-          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=https://localhost:6001" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
+          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${{ secrets.AUTHORITY }}" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
           JWT=$(echo $OIDC_TOKEN | jq -j '.value')
           echo "$JWT" | awk -F. '{print $2}' | base64 -d 2>/dev/null | jq -r
           echo "JWT=$JWT" >> $GITHUB_ENV
+
+      - name: Exchange OIDC token
+        run: |
+          echo "Exchanging OIDC token for access token..."
+          response=$(curl -sLS -X POST "${{ secrets.AUTHORITY }}/connect/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -H "X-Tunnel-Authorization: tunnel ${{ secrets.TUNNEL_TOKEN }}" \
+            -d "client_id=${{ secrets.CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.CLIENT_SECRET }}" \
+            -d "grant_type=github_token_exchange" \
+            -d "subject_token=${{ steps.oidc.outputs.JWT }}" \
+            -d "subject_token_type=urn:ietf:params:oauth:token-type:id_token" \
+            -d "scope=api")
+          echo "$ACCESS_TOKEN"
