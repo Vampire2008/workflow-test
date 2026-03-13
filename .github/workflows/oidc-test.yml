@@ -33,4 +33,4 @@ jobs:
             -d "subject_token=${{ steps.oidc.outputs.JWT }}" \
             -d "subject_token_type=urn:ietf:params:oauth:token-type:id_token" \
             -d "scope=api")
-          echo "$ACCESS_TOKEN"
+          echo "$response"
